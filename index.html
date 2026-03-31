@@ -32,15 +32,23 @@
 <link rel="icon" href="favicon.ico" type="image/x-icon"><title>Anup Dahal — Portfolio</title>
 <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400;0,700;0,900;1,400&amp;family=Outfit:wght@300;400;500;600&amp;family=Space+Mono:wght@400;700&amp;display=swap" rel="stylesheet">
 <style>
-  .about-photo {
+ .about-grid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 4rem;
+  align-items: start;
+}
+
+/* Photo styling */
+.about-photo {
   display: flex;
   justify-content: center;
-  align-items: center;
+  align-items: start;
 }
 
 .about-photo img {
-  width: 100%;
-  max-width: 300px; /* adjust size */
+  width: 30%;
+  max-width: 300px;
   border-radius: 16px;
   border: 2px solid var(--jade);
   object-fit: cover;
@@ -53,7 +61,17 @@
   box-shadow: 0 20px 40px rgba(82,183,136,0.4);
 }
 
-  *, *::before, *::after { margin: 0; padding: 0; box-sizing: border-box; }
+/* Responsive: stack text and photo on smaller screens */
+@media (max-width: 768px) {
+  .about-grid {
+    grid-template-columns: 1fr;
+    gap: 2rem;
+  }
+
+  .about-photo img {
+    max-width: 80%;
+  }
+}  *, *::before, *::after { margin: 0; padding: 0; box-sizing: border-box; }
 
   :root {
     --night: #080e1a;

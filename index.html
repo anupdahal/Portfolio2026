@@ -32,6 +32,27 @@
 <link rel="icon" href="favicon.ico" type="image/x-icon"><title>Anup Dahal — Portfolio</title>
 <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400;0,700;0,900;1,400&amp;family=Outfit:wght@300;400;500;600&amp;family=Space+Mono:wght@400;700&amp;display=swap" rel="stylesheet">
 <style>
+  .about-photo {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+.about-photo img {
+  width: 100%;
+  max-width: 300px; /* adjust size */
+  border-radius: 16px;
+  border: 2px solid var(--jade);
+  object-fit: cover;
+  box-shadow: 0 12px 30px rgba(82,183,136,0.2);
+  transition: transform 0.3s, box-shadow 0.3s;
+}
+
+.about-photo img:hover {
+  transform: translateY(-4px);
+  box-shadow: 0 20px 40px rgba(82,183,136,0.4);
+}
+
   *, *::before, *::after { margin: 0; padding: 0; box-sizing: border-box; }
 
   :root {
@@ -746,6 +767,10 @@
         <p>Hello! I'm <strong>Anup Dahal</strong>. Born in the golden sands of <strong>Bikaner, Rajasthan INDIA</strong>, raised amidst the crisp mountain air of <strong>Okhaldhunga, NEPAL</strong>, and now living in the lush terai of <strong>Gauradaha, Jhapa NEPAL</strong>.</p>
 <p>Every place I've called home has taught me something unique — from Rajasthan's vibrancy to Nepal's Himalayan calm — shaping my curiosity and approach to problem-solving in technology.</p>
 <p>Currently pursuing my <strong>Bachelor's in Computer Application</strong> at Model College Damak, I love building <strong>web solutions that are functional, simple, and beautiful</strong>.</p>
+<!-- Photo -->
+      <div class="about-photo">
+        <img src="anupImg.jpeg" alt="Anup Dahal Photo">
+      </div>
         <div class="interests-wrap">
           <div class="interests-title"><strong>// What I love</strong></div>
           <div class="interests-pills">

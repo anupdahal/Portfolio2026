@@ -1,6 +1,4 @@
 <html lang="en"><head>
-<meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
 
 <!-- Primary Meta Tags -->
 <meta charset="UTF-8">
@@ -9,24 +7,24 @@
 <meta name="description" content="Anup Dahal's professional portfolio showcasing web development, programming projects, experience, education, and contact information. Explore my skills in HTML, CSS, JavaScript, and full-stack development.">
 <meta name="author" content="Anup Dahal">
 <meta name="robots" content="index, follow">
-<meta name="keywords" content="Anup Dahal, Portfolio, Web Developer, Frontend Developer, Full-stack Developer, HTML, CSS, JavaScript, Projects, Experience, Contact">
+<meta name="keywords" content="Anup Dahal, Anup, Dahal, AD, Gauradaha, Nepal, anup, dahal, Portfolio, Web Developer, Frontend Developer, Full-stack Developer, HTML, CSS, JavaScript, Projects, Experience, Contact">
 
 <!-- Open Graph / Facebook -->
 <meta property="og:type" content="website">
 <meta property="og:title" content="Anup Dahal — Portfolio">
 <meta property="og:description" content="Explore Anup Dahal's professional portfolio featuring web development projects, programming skills, and experience.">
-<meta property="og:image" content="URL_to_preview_image.jpg">
-<meta property="og:url" content="https://yourwebsite.com">
+<meta property="og:image" content="anupImg.jpeg">
+<meta property="og:url" content="https://anupdahalwebsite.netlify.app/">
 <meta property="og:site_name" content="Anup Dahal Portfolio">
 
 <!-- Twitter -->
 <meta name="twitter:card" content="summary_large_image">
 <meta name="twitter:title" content="Anup Dahal — Portfolio">
 <meta name="twitter:description" content="Professional portfolio of Anup Dahal, showcasing projects, skills, and experience in web development and programming.">
-<meta name="twitter:image" content="URL_to_preview_image.jpg">
+<meta name="twitter:image" content="anupImg.jpeg">
 
 <!-- Canonical -->
-<link rel="canonical" href="https://yourwebsite.com">
+<link rel="canonical" href="https://anupdahalwebsite.netlify.app/">
 
 <!-- Favicon -->
 <link rel="icon" href="favicon.ico" type="image/x-icon"><title>Anup Dahal — Portfolio</title>
@@ -203,13 +201,18 @@
   }
   .btn-outline:hover { border-color: var(--jade); color: var(--jade); }
 
-  .scroll-hint {
-    position: absolute; bottom: 2rem; left: 50%;
-    transform: translateX(-50%);
-    display: flex; flex-direction: column; align-items: center; gap: 0.5rem;
-    animation: fadeUp 0.8s 0.8s ease both;
-    z-index: 2;
-  }
+.scroll-hint {
+  position: fixed; 
+  bottom: 20px; 
+  left: 50%;
+  transform: translateX(-50%);
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 0.5rem;
+  animation: fadeUp 0.8s 0.8s ease both;
+  z-index: 999;
+}
   .scroll-hint span { font-size: 0.65rem; letter-spacing: 0.2em; text-transform: uppercase; color: var(--pine); }
   .scroll-line { width: 1px; height: 40px; background: var(--pine); animation: scrollPulse 2s ease infinite; }
 
@@ -674,6 +677,7 @@
 
   /* Mountain silhouette shapes */
   .mountain-layer { position: absolute; bottom: 0; width: 100%; }
+  
 </style>
 </head>
 <body>
@@ -757,24 +761,26 @@
 
   <!-- Hero Content -->
   <div class="hero-content">
-    <div class="hero-tag"><b>Assistant Computer Operator <br> Nepse Investor/ Trader</b></div>
-    <h1 class="hero-name">Anup<br><span>Dahal</span></h1>
-    <p class="hero-tagline">Web developer simplifying tasks, loves mountains & exploring.</p>
+
+    <h1 class="hero-name">Anup<br><span>Dahal</span></h1><br><br>
+    
+ <p class="hero-tagline" style="margin-top:1rem;">
+      <strong>I</strong> <span id="typing" style="color:#52B788;"></span>
+    </p><br>
+    
     <div class="hero-cta">
       <a href="#projects" class="btn-primary">View Projects</a>
       <a href="#contact" class="btn-outline">Get in Touch</a>
     </div>
   </div>
+<br>
 
-  <div class="scroll-hint">
-    <span>Scroll</span>
-    <div class="scroll-line"></div>
-  </div>
 </section>
 
 <!-- ─── ABOUT ─── -->
 <section id="about">
   <div class="section-wrapper">
+
     <div class="section-header">
       <span class="section-num">01</span>
       <h2 class="section-title">About Me</h2>
@@ -782,28 +788,78 @@
     </div>
 
     <div class="about-grid">
-      <div class="about-text">
-              <div class="about-photo">
-        <img src="anupImg.jpeg" alt="Anup Dahal Photo">
-      </div>
-        <p>Hello! I'm <strong>Anup Dahal</strong>. I was born in <strong>Bikaner, Rajasthan, India</strong>, grew up in the mountains of <strong>Okhaldhunga, Nepal</strong>, and now live in the green plains of <strong>Gauradaha, Jhapa, Nepal</strong>.</p>
 
-        <div class="interests-wrap">
-          <div class="interests-title"><strong>// What I love</strong></div>
-          <div class="interests-pills">
-            <div class="pill"><span class="pill-icon">🏏</span> Cricket</div>
-            <div class="pill"><span class="pill-icon">🏊</span> Swimming</div>
-            <div class="pill"><span class="pill-icon">🏸</span> Badminton</div>
-            <div class="pill"><span class="pill-icon">🤼</span> Kabbadi</div>
-            <div class="pill"><span class="pill-icon">♟️</span> Chess</div>
-            <div class="pill"><span class="pill-icon">🏔️</span> Hiking</div>
-            <div class="pill"><span class="pill-icon">🌊</span> Waterfalls</div>
-            <div class="pill"><span class="pill-icon">🌿</span> Nature</div>
+      <!-- TEXT -->
+      <div class="about-text">
+
+<p>
+  Hi, I’m <strong>Anup Dahal</strong> — a student and aspiring developer passionate about building 
+  practical systems that solve real-world problems.
+
+  <br><br>
+
+  Originally from <strong>Bikaner, India</strong> and raised in the hills of 
+  <strong>Okhaldhunga, Nepal</strong>, I’m currently based in 
+  <strong>Gauradaha, Jhapa</strong>.
+
+  <br><br>
+
+  I enjoy creating simple and efficient systems that make everyday tasks easier and more useful in real life.  
+  I also have experience working as an assistant computer operator at Gauradaha Municipality, handling digital workflows and system operations.
+
+  <br><br>
+
+  Outside of tech, I love mountains, travel, and nature, and I actively follow the Nepal Stock Market (NEPSE) with a growing interest in investment.
+
+  <br><br>
+
+  Quiet by nature, focused by mindset — I believe in continuous learning and building things that matter.
+</p>
+
+        <!-- INTERESTS -->
+        <div style="margin-top: 1.5rem;">
+
+          <div style="font-size: 0.7rem; letter-spacing: 0.2em; color: #52B788; margin-bottom: 1rem; font-family: 'Space Mono', monospace;">
+            <strong>// Interests</strong>
+          </div>
+
+          <div style="display: flex; flex-wrap: wrap; gap: 0.6rem;">
+
+            <!-- Interest Items -->
+            <span style="padding: 0.4rem 0.9rem; border-radius: 100px; background: rgba(82,183,136,0.08); border: 1px solid rgba(82,183,136,0.2); font-size: 0.85rem; color: #fff; cursor: pointer; transition: all 0.3s ease;"
+              onmouseover="this.style.boxShadow='0 0 12px rgba(82,183,136,0.6)'; this.style.transform='scale(1.05)'"
+              onmouseout="this.style.boxShadow='none'; this.style.transform='scale(1)'">💻 Web Dev</span>
+
+            <span style="padding: 0.4rem 0.9rem; border-radius: 100px; background: rgba(82,183,136,0.08); border: 1px solid rgba(82,183,136,0.2); font-size: 0.85rem; color: #fff; cursor: pointer; transition: all 0.3s ease;"
+              onmouseover="this.style.boxShadow='0 0 12px rgba(82,183,136,0.6)'; this.style.transform='scale(1.05)'"
+              onmouseout="this.style.boxShadow='none'; this.style.transform='scale(1)'">🎧 Music</span>
+
+            <span style="padding: 0.4rem 0.9rem; border-radius: 100px; background: rgba(82,183,136,0.08); border: 1px solid rgba(82,183,136,0.2); font-size: 0.85rem; color: #fff; cursor: pointer; transition: all 0.3s ease;"
+              onmouseover="this.style.boxShadow='0 0 12px rgba(82,183,136,0.6)'; this.style.transform='scale(1.05)'"
+              onmouseout="this.style.boxShadow='none'; this.style.transform='scale(1)'">✍️ Writing</span>
+
+            <span style="padding: 0.4rem 0.9rem; border-radius: 100px; background: rgba(82,183,136,0.08); border: 1px solid rgba(82,183,136,0.2); font-size: 0.85rem; color: #fff; cursor: pointer; transition: all 0.3s ease;"
+              onmouseover="this.style.boxShadow='0 0 12px rgba(82,183,136,0.6)'; this.style.transform='scale(1.05)'"
+              onmouseout="this.style.boxShadow='none'; this.style.transform='scale(1)'">🏏 Cricket</span>
+
+            <span style="padding: 0.4rem 0.9rem; border-radius: 100px; background: rgba(82,183,136,0.08); border: 1px solid rgba(82,183,136,0.2); font-size: 0.85rem; color: #fff; cursor: pointer; transition: all 0.3s ease;"
+              onmouseover="this.style.boxShadow='0 0 12px rgba(82,183,136,0.6)'; this.style.transform='scale(1.05)'"
+              onmouseout="this.style.boxShadow='none'; this.style.transform='scale(1)'">🏔️ Mountains</span>
+
+            <span style="padding: 0.4rem 0.9rem; border-radius: 100px; background: rgba(82,183,136,0.08); border: 1px solid rgba(82,183,136,0.2); font-size: 0.85rem; color: #fff; cursor: pointer; transition: all 0.3s ease;"
+              onmouseover="this.style.boxShadow='0 0 12px rgba(82,183,136,0.6)'; this.style.transform='scale(1.05)'"
+              onmouseout="this.style.boxShadow='none'; this.style.transform='scale(1)'">🧳 Travel</span>
+
+            <span style="padding: 0.4rem 0.9rem; border-radius: 100px; background: rgba(82,183,136,0.08); border: 1px solid rgba(82,183,136,0.2); font-size: 0.85rem; color: #fff; cursor: pointer; transition: all 0.3s ease;"
+              onmouseover="this.style.boxShadow='0 0 12px rgba(82,183,136,0.6)'; this.style.transform='scale(1.05)'"
+              onmouseout="this.style.boxShadow='none'; this.style.transform='scale(1)'">📈 NEPSE</span>
+
           </div>
         </div>
-      </div>
 
+      </div>
     </div>
+
   </div>
 </section>
 
@@ -822,7 +878,7 @@
         <div class="edu-period">2064 – 2068 BS</div>
         <div class="edu-school">Shree Suryodaya Nimna Madyamik Bidhyalaya</div>
         <div class="edu-location">📍 Dhimdime, Gauradaha-3, Jhapa · Est. 2022 BS</div>
-        <span class="edu-badge">Grades 0–3 · Nepali Medium</span>
+        <span class="edu-badge">Grades 0–3 </span>
       </div>
 
       <div class="timeline-item">
@@ -830,7 +886,7 @@
         <div class="edu-period">2069 – 2072 BS</div>
         <div class="edu-school">Shree Red Star Boarding English School</div>
         <div class="edu-location">📍 Gauradaha-3, Shantitol, Jhapa · Est. 2066 BS by Mr. Kumar Poudel</div>
-        <span class="edu-badge">Grades 2–5 · English Medium</span>
+        <span class="edu-badge">Grades 2–5</span>
       </div>
 
       <div class="timeline-item">
@@ -865,6 +921,7 @@
 <!-- ─── EXPERIENCE ─── -->
 <section id="experience">
   <div class="section-wrapper">
+
     <div class="section-header">
       <span class="section-num">03</span>
       <h2 class="section-title">Experience</h2>
@@ -873,103 +930,130 @@
 
     <div class="exp-grid">
 
-      <!-- Current Job -->
+      <!-- CURRENT JOB -->
       <div class="exp-card current full">
         <div class="exp-top">
           <span class="exp-icon">🏛️</span>
-          <span class="exp-status active live-dot">Currently Working</span>
+          <span class="exp-status active live-dot">Present</span>
         </div>
+
         <div class="exp-role">Assistant Computer Operator</div>
         <div class="exp-org">Gauradaha Municipality Office</div>
-        <div class="exp-period">2079/10/11 BS — Present &nbsp;·&nbsp; Gauradaha, Jhapa</div>
-    
+        <div class="exp-period">2079/10/11 BS — Present · Gauradaha, Jhapa</div>
+
+        <div class="exp-desc">
+          Managing digital workflows, handling municipal systems, and supporting administrative operations.
+        </div>
+
         <div class="exp-tags">
-          <span class="exp-tag">Rajaswo (राजस्व)</span>
-          <span class="exp-tag">Panjikaran (पञ्जिकरण)</span>
-          <span class="exp-tag"> (सामाजिक सुरक्षा भत्ता)</span>
-          <span class="exp-tag">Nagarikta Sifarish (नागरिकता सिफारिश)</span>
-                    <span class="exp-tag">(विविध सिफारिश)</span>
+          <span class="exp-tag">Revenue System</span>
+          <span class="exp-tag">Registration</span>
+          <span class="exp-tag">Social Security</span>
+          <span class="exp-tag">Citizenship Recommendation</span>
+          <span class="exp-tag">Office Documentation</span>
         </div>
       </div>
 
-      <!-- OJT After Grade 12 -->
+      <!-- OJT -->
       <div class="exp-card">
         <div class="exp-top">
           <span class="exp-icon">💼</span>
-          <span class="exp-status ojt">OJT · Grade 10 & 12</span>
+          <span class="exp-status ojt">OJT</span>
         </div>
-        <div class="exp-role">On-Job Training (OJT)</div>
+
+        <div class="exp-role">On-the-Job Training</div>
         <div class="exp-org">Gauradaha Municipality Office</div>
-        <div class="exp-period">6 Months &nbsp;·&nbsp; After Grade 10 & 12 · Janata Secondary School</div>
+        <div class="exp-period">6 Months · Grade 10 & 12 Internship</div>
+
+        <div class="exp-desc">
+          Hands-on training on municipal systems, workflows, and basic administrative operations.
+        </div>
+
         <div class="exp-tags">
-          <!-- <span class="exp-tag">Computer Engineering</span> -->
-          <span class="exp-tag">Municipal System and its Workflow</span>
-          <!-- <span class="exp-tag">6 Months</span> -->
+          <span class="exp-tag">Municipal Workflow</span>
+          <span class="exp-tag">Office Systems</span>
+          <span class="exp-tag">Documentation</span>
         </div>
       </div>
 
-      <!-- MERN Workshop -->
+      <!-- WORKSHOP -->
       <div class="exp-card workshop full">
         <div class="exp-top">
           <span class="exp-icon">⚡</span>
           <span class="exp-status ws">Workshop</span>
         </div>
+
         <div class="exp-role">MERN Stack Development Workshop</div>
         <div class="exp-org">Model College Damak</div>
-        <div class="exp-period">3-Day Intensive Workshop &nbsp;·&nbsp; Damak, Jhapa</div>
-      
+        <div class="exp-period">3-Day Intensive Training</div>
+
+        <div class="exp-desc">
+          Intensive hands-on workshop on full-stack web development using modern JavaScript technologies.
+        </div>
+
         <div class="exp-tags">
           <span class="exp-tag">MongoDB</span>
-          <span class="exp-tag">Express.js</span>
+          <span class="exp-tag">Express</span>
           <span class="exp-tag">React</span>
           <span class="exp-tag">Node.js</span>
           <span class="exp-tag">REST API</span>
-          <span class="exp-tag">Full-Stack</span>
-          <span class="exp-tag">JavaScript</span>
+          <span class="exp-tag">Full Stack</span>
         </div>
       </div>
 
     </div>
   </div>
 </section>
-
 <!-- ─── PROJECTS ─── -->
 <section id="projects">
   <div class="section-wrapper">
+
     <div class="section-header">
       <span class="section-num">04</span>
       <h2 class="section-title">Projects</h2>
       <div class="section-line"></div>
     </div>
 
-          <div class="project-card">
-        <div class="project-thumb" style="background: linear-gradient(135deg, #1a1025, #0d0a20);">🎵</div>
-        <div class="project-body">
-          <div class="project-title">Anup Nepse Dashboard</div>
-          <div class="project-desc">This NEPSE dashboard provides a comprehensive view of IPO activities, including user details, applied and allotted IPOs, sold and remaining shares, as well as primary and secondary profits. It allows users to analyze individual and overall profit data, copy information for further use, and track the latest IPO updates efficiently.</div>
-          <!-- <a href="https://anupsong.netlify.app/" target="_blank" class="project-link">anupsong.netlify.app</a> -->
-        </div>
-      </div>
-      
     <div class="projects-grid">
-      <div class="project-card">
-        <div class="project-thumb" style="background: linear-gradient(135deg, #1a2a1a, #0d2010);">🏠</div>
+
+      <div class="project-card" onclick="openProject(0)">
+        <div class="project-thumb">📈</div>
         <div class="project-body">
-          <div class="project-title">MeroSutra — Property Calculator</div>
-          <div class="project-desc">A multi-section web app that captures user input for calculating house cost, property area, and personal/citizenship details. Streamlines property-related information processing.</div>
-          <!-- <a href="https://merosutra.netlify.app/" target="_blank" class="project-link">merosutra.netlify.app</a> -->
+          <div class="project-title">Stock Dashboard</div>
+          <div class="project-desc">IPO tracking & profit system</div>
         </div>
       </div>
 
-
-      <div class="project-card">
-        <div class="project-thumb" style="background: linear-gradient(135deg, #0d2020, #081520);">📚</div>
+      <div class="project-card" onclick="openProject(1)">
+        <div class="project-thumb">🏠</div>
         <div class="project-body">
-          <div class="project-title">BCA Note — Student Resource Hub</div>
-          <div class="project-desc">A dedicated website for BCA students providing comprehensive academic resources, study materials, and community support to make university life easier.</div>
-          <!-- <a href="https://bcanote.netlify.app/" target="_blank" class="project-link">bcanote.netlify.app</a> -->
+          <div class="project-title">MeroSutra</div>
+          <div class="project-desc">Property & municipal system tool</div>
         </div>
       </div>
+
+      <div class="project-card" onclick="openProject(2)">
+        <div class="project-thumb">📚</div>
+        <div class="project-body">
+          <div class="project-title">BCA Notes Hub</div>
+          <div class="project-desc">Student resource platform</div>
+        </div>
+      </div>
+<div class="project-card" onclick="openProject(4)">
+  <div class="project-thumb">🏫</div>
+  <div class="project-body">
+    <div class="project-title">School Management System</div>
+    <div class="project-desc">Admin • Teachers • Students communication platform</div>
+  </div>
+</div>
+      <div class="project-card" onclick="openProject(3)">
+        <div class="project-thumb">🎓</div>
+        <div class="project-body">
+          <div class="project-title">ERP System</div>
+          <div class="project-desc">School management system</div>
+        </div>
+      </div>
+
     </div>
   </div>
 </section>
@@ -982,7 +1066,6 @@
         <span class="section-num">05</span>
         <h2 class="section-title">Let's Connect</h2>
       </div>
-      <!-- <p class="contact-subtitle"> I'd love to hear from you.</p> -->
 
       <div class="contact-cards">
         <div class="contact-row">
@@ -1015,7 +1098,7 @@
 
 <!-- ─── FOOTER ─── -->
 <footer>
-  <span>♥ Anup Dahal</span>
+  <span>With ♥ Anup Dahal</span>
   <!-- <span>Built with ♥ from Jhapa, Nepal 🇳🇵</span> -->
 </footer>
 
@@ -1045,4 +1128,123 @@
     });
     navLinks.forEach(link => {
       link.style.color = link.getAttribute('href') === `#${current}` ? 'var(--jade)' : '';
-    })</script></body></html>
+    });
+  });
+</script>
+<!-- SCRIPT -->
+<script>
+const words = [
+  "build systems that solve real problems.",
+  "create tools that simplify daily tasks.",
+  "love mountains, nature, and clean design.",
+  "turn ideas into practical applications."
+];
+
+let i = 0, j = 0, currentWord = "", isDeleting = false;
+
+function type() {
+  currentWord = words[i];
+  document.getElementById("typing").textContent = currentWord.substring(0, j);
+
+  if (!isDeleting && j < currentWord.length) {
+    j++;
+    setTimeout(type, 70);
+  } else if (isDeleting && j > 0) {
+    j--;
+    setTimeout(type, 40);
+  } else {
+    isDeleting = !isDeleting;
+    if (!isDeleting) i = (i + 1) % words.length;
+    setTimeout(type, 1000);
+  }
+}
+
+type();
+</script>
+<!-- ─── PROJECT MODAL ─── -->
+<div id="projectModal" style="
+display:none;
+position:fixed;
+inset:0;
+background:rgba(0,0,0,0.75);
+backdrop-filter:blur(8px);
+justify-content:center;
+align-items:center;
+z-index:9999;
+">
+
+  <div style="
+    background:#0d1b2a;
+    padding:25px;
+    border-radius:18px;
+    width:90%;
+    max-width:450px;
+    border:1px solid rgba(82,183,136,0.2);
+    box-shadow:0 20px 60px rgba(0,0,0,0.5);
+    position:relative;
+  ">
+
+    <span onclick="closeProject()" style="
+      position:absolute;
+      top:10px;
+      right:15px;
+      cursor:pointer;
+      font-size:22px;
+      color:#52b788;
+    ">×</span>
+
+    <div id="modalIcon" style="font-size:40px; margin-bottom:10px;"></div>
+    <h2 id="modalTitle" style="color:#edf6f9;"></h2>
+    <p id="modalDesc" style="color:#b7d5e0; line-height:1.6;"></p>
+
+  </div>
+</div>
+<script>
+const projects = [
+  {
+    icon: "📈",
+    title: "Stock Dashboard",
+    desc: "A complete IPO tracking and profit management system built with real-time calculation and analytics dashboard."
+  },
+  {
+    icon: "🏠",
+    title: "MeroSutra",
+    desc: "A smart municipal and property management system designed for local administrative operations."
+  },
+  {
+    icon: "📚",
+    title: "BCA Notes Hub",
+    desc: "A student learning platform that organizes BCA notes, resources, and academic materials."
+  },
+  {
+    icon: "🎓",
+    title: "ERP System",
+    desc: "Full school ERP system with student management, marks, attendance, and reporting modules."
+  },
+  {
+  icon: "🏫",
+  title: "School Management System",
+  desc: "A full-stack school management system that connects administration, teachers, and students. It supports announcements, messaging, marks management, attendance, and role-based dashboards for each user type."
+}
+];
+
+function openProject(index){
+  document.getElementById("modalIcon").innerText = projects[index].icon;
+  document.getElementById("modalTitle").innerText = projects[index].title;
+  document.getElementById("modalDesc").innerText = projects[index].desc;
+
+  document.getElementById("projectModal").style.display = "flex";
+}
+
+function closeProject(){
+  document.getElementById("projectModal").style.display = "none";
+}
+
+window.onclick = function(e){
+  if(e.target.id === "projectModal"){
+    closeProject();
+  }
+}
+</script>
+  </body>
+  </html>

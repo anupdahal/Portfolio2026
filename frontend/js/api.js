@@ -4,7 +4,10 @@
 
 const API = (() => {
   // Configure your backend API URL here
-  const BASE_URL = window.API_BASE_URL || 'http://localhost:5000/api';
+  // For PHP backend: point to your PHP server URL
+  // Examples: 'http://localhost:8000/api' (PHP built-in server)
+  //           'http://localhost/portfolio/backend-php/api' (Apache)
+  const BASE_URL = window.API_BASE_URL || 'http://localhost:8000/api';
 
   function getToken() {
     return localStorage.getItem('portfolio_token');

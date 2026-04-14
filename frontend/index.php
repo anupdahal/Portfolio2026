@@ -1,44 +1,123 @@
+<?php
+require_once __DIR__ . '/includes/config.php';
+
+// Fetch projects from DB
+$projects = [];
+$projectSearch = $_GET['search'] ?? '';
+$projectPage = max(1, (int)($_GET['page'] ?? 1));
+$projectLimit = 6;
+$projectOffset = ($projectPage - 1) * $projectLimit;
+$totalProjects = 0;
+
+$pdo = getDB();
+if ($pdo) {
+    try {
+        // Count
+        if ($projectSearch) {
+            $stmt = $pdo->prepare('SELECT COUNT(*) as total FROM projects WHERE title LIKE ? OR description LIKE ?');
+            $stmt->execute(["%$projectSearch%", "%$projectSearch%"]);
+        } else {
+            $stmt = $pdo->query('SELECT COUNT(*) as total FROM projects');
+        }
+        $totalProjects = (int)$stmt->fetch()['total'];
+
+        // Fetch
+        if ($projectSearch) {
+            $stmt = $pdo->prepare('SELECT * FROM projects WHERE title LIKE ? OR description LIKE ? ORDER BY created_at DESC LIMIT ? OFFSET ?');
+            $stmt->execute(["%$projectSearch%", "%$projectSearch%", $projectLimit, $projectOffset]);
+        } else {
+            $stmt = $pdo->prepare('SELECT * FROM projects ORDER BY created_at DESC LIMIT ? OFFSET ?');
+            $stmt->execute([$projectLimit, $projectOffset]);
+        }
+        $projects = $stmt->fetchAll();
+    } catch (Exception $e) {
+        $projects = [];
+    }
+}
+
+// Fallback projects if DB unavailable
+if (empty($projects) && !$projectSearch) {
+    $projects = [
+        ['id' => 0, 'title' => 'Stock Dashboard', 'description' => 'A complete IPO tracking and profit management system built with real-time calculation and analytics dashboard.', 'tech_stack' => 'HTML,CSS,PHP,Chart.js', 'live_url' => '', 'github_url' => '', 'image_url' => ''],
+        ['id' => 0, 'title' => 'MeroSutra', 'description' => 'A smart municipal and property management system designed for local administrative operations.', 'tech_stack' => 'PHP,MySQL,Bootstrap', 'live_url' => '', 'github_url' => '', 'image_url' => ''],
+        ['id' => 0, 'title' => 'BCA Notes Hub', 'description' => 'A student learning platform that organizes BCA notes, resources, and academic materials.', 'tech_stack' => 'HTML,CSS,PHP', 'live_url' => '', 'github_url' => '', 'image_url' => ''],
+        ['id' => 0, 'title' => 'School Management System', 'description' => 'A full-stack school management system connecting administration, teachers, and students.', 'tech_stack' => 'PHP,MySQL,HTML,CSS', 'live_url' => '', 'github_url' => '', 'image_url' => ''],
+        ['id' => 0, 'title' => 'ERP System', 'description' => 'Full school ERP system with student management, marks, attendance, and reporting modules.', 'tech_stack' => 'PHP,MySQL,HTML,CSS', 'live_url' => '', 'github_url' => '', 'image_url' => ''],
+    ];
+    $totalProjects = count($projects);
+}
+
+$totalProjectPages = max(1, (int)ceil($totalProjects / $projectLimit));
+
+// Fetch memories from DB
+$memories = [];
+if ($pdo) {
+    try {
+        $stmt = $pdo->prepare('SELECT * FROM memories ORDER BY created_at DESC LIMIT 12');
+        $stmt->execute();
+        $memories = $stmt->fetchAll();
+    } catch (Exception $e) {
+        $memories = [];
+    }
+}
+
+// Fetch blogs from DB
+$blogs = [];
+$blogSearch = $_GET['blog_search'] ?? '';
+if ($pdo) {
+    try {
+        if ($blogSearch) {
+            $stmt = $pdo->prepare('SELECT id, title, LEFT(content, 200) as excerpt, cover_image, created_at FROM blogs WHERE title LIKE ? OR content LIKE ? ORDER BY created_at DESC LIMIT 6');
+            $stmt->execute(["%$blogSearch%", "%$blogSearch%"]);
+        } else {
+            $stmt = $pdo->query('SELECT id, title, LEFT(content, 200) as excerpt, cover_image, created_at FROM blogs ORDER BY created_at DESC LIMIT 6');
+        }
+        $blogs = $stmt->fetchAll();
+    } catch (Exception $e) {
+        $blogs = [];
+    }
+}
+
+// Project emoji helper
+function getProjectEmoji($title) {
+    $map = ['stock' => '&#128200;', 'mero' => '&#127968;', 'bca' => '&#128218;', 'note' => '&#128218;', 'school' => '&#127979;', 'erp' => '&#127891;', 'dashboard' => '&#128202;'];
+    $lower = strtolower($title);
+    foreach ($map as $key => $emoji) {
+        if (strpos($lower, $key) !== false) return $emoji;
+    }
+    return '&#128187;';
+}
+?>
 <!DOCTYPE html>
-<html lang="en" data-theme="dark">
+<html lang="en" data-theme="<?= e($theme) ?>">
 <head>
-  <!-- Primary Meta Tags -->
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Anup Dahal — Portfolio</title>
   <meta name="description" content="Anup Dahal's professional portfolio showcasing web development, programming projects, experience, education, and contact information.">
   <meta name="author" content="Anup Dahal">
   <meta name="robots" content="index, follow">
-  <meta name="keywords" content="Anup Dahal, Portfolio, Web Developer, Frontend Developer, Full-stack Developer, HTML, CSS, JavaScript, Projects">
+  <meta name="keywords" content="Anup Dahal, Portfolio, Web Developer, Frontend Developer, Full-stack Developer, HTML, CSS, PHP, Projects">
 
-  <!-- Open Graph -->
   <meta property="og:type" content="website">
   <meta property="og:title" content="Anup Dahal — Portfolio">
   <meta property="og:description" content="Explore Anup Dahal's professional portfolio featuring web development projects, programming skills, and experience.">
   <meta property="og:image" content="assets/anupImg.jpeg">
 
-  <!-- Twitter -->
   <meta name="twitter:card" content="summary_large_image">
   <meta name="twitter:title" content="Anup Dahal — Portfolio">
   <meta name="twitter:description" content="Professional portfolio of Anup Dahal, showcasing projects, skills, and experience in web development.">
   <meta name="twitter:image" content="assets/anupImg.jpeg">
 
-  <!-- Fonts -->
   <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400;0,700;0,900;1,400&family=Outfit:wght@300;400;500;600&family=Space+Mono:wght@400;700&display=swap" rel="stylesheet">
-
-  <!-- Styles -->
   <link rel="stylesheet" href="css/style.css">
 </head>
 <body>
 
-<!-- Page Loader -->
-<div id="pageLoader" class="page-loader">
-  <div class="loader-spinner"></div>
-</div>
+<!-- CSS-only mobile menu toggle -->
+<input type="checkbox" id="menuToggle" class="menu-toggle-input">
 
-<!-- Toast Container -->
-<div id="toastContainer" class="toast-container"></div>
-
-<!-- ─── NAV ─── -->
+<!-- NAV -->
 <nav>
   <a href="#hero" class="nav-logo">AD</a>
 
@@ -54,15 +133,18 @@
   </ul>
 
   <div class="nav-right">
-    <button id="themeToggle" class="theme-toggle" aria-label="Toggle theme">&#9790;</button>
-    <button id="hamburger" class="hamburger" aria-label="Menu">
+    <a href="?toggle_theme=1<?= $projectSearch ? '&search=' . urlencode($projectSearch) : '' ?>" class="theme-toggle" aria-label="Toggle theme">
+      <?= $theme === 'dark' ? '&#9788;' : '&#9790;' ?>
+    </a>
+    <label for="menuToggle" class="hamburger" aria-label="Menu">
       <span></span><span></span><span></span>
-    </button>
+    </label>
   </div>
 </nav>
 
 <!-- Mobile Menu -->
-<div id="mobileMenu" class="mobile-menu">
+<div class="mobile-menu">
+  <label for="menuToggle" class="mobile-menu-close">&#10005;</label>
   <a href="#about">About</a>
   <a href="#skills">Skills</a>
   <a href="#education">Education</a>
@@ -73,7 +155,7 @@
   <a href="#contact">Contact</a>
 </div>
 
-<!-- ─── HERO ─── -->
+<!-- HERO -->
 <section id="hero">
   <div class="blob blob-1"></div>
   <div class="blob blob-2"></div>
@@ -117,7 +199,7 @@
   <div class="hero-content">
     <h1 class="hero-name">Anup<br><span>Dahal</span></h1>
     <p class="hero-tagline" style="margin-top:1.5rem;">
-      <strong>I</strong> <span id="typing" style="color:var(--jade);"></span>
+      <strong>I</strong> <span class="typing-text">build systems that solve real problems.</span>
     </p>
     <div class="hero-cta">
       <a href="#projects" class="btn-primary">View Projects</a>
@@ -131,17 +213,17 @@
   </div>
 </section>
 
-<!-- ─── ABOUT ─── -->
+<!-- ABOUT -->
 <section id="about">
   <div class="section-wrapper">
-    <div class="section-header fade-in">
+    <div class="section-header">
       <span class="section-num">01</span>
       <h2 class="section-title">About Me</h2>
       <div class="section-line"></div>
     </div>
 
     <div class="about-grid">
-      <div class="about-text fade-in">
+      <div class="about-text">
         <p>
           Hi, I'm <strong>Anup Dahal</strong> — a student and aspiring developer passionate about building
           practical systems that solve real-world problems.
@@ -193,63 +275,58 @@
         </div>
       </div>
 
-      <div class="about-photo fade-in">
+      <div class="about-photo">
         <img src="assets/anupImg.jpeg" alt="Anup Dahal" loading="lazy">
       </div>
     </div>
   </div>
 </section>
 
-<!-- ─── SKILLS ─── -->
+<!-- SKILLS -->
 <section id="skills">
   <div class="section-wrapper">
-    <div class="section-header fade-in">
+    <div class="section-header">
       <span class="section-num">02</span>
       <h2 class="section-title">Skills</h2>
       <div class="section-line"></div>
     </div>
 
     <div class="skills-grid">
-      <div class="skill-category fade-in">
+      <div class="skill-category">
         <div class="skill-cat-icon">&#127760;</div>
         <div class="skill-cat-title">Frontend Development</div>
         <div class="skill-items">
           <span class="skill-tag">HTML5</span>
           <span class="skill-tag">CSS3</span>
-          <span class="skill-tag">JavaScript</span>
-          <span class="skill-tag">React</span>
           <span class="skill-tag">Bootstrap</span>
           <span class="skill-tag">Responsive Design</span>
         </div>
       </div>
 
-      <div class="skill-category fade-in">
+      <div class="skill-category">
         <div class="skill-cat-icon">&#9881;&#65039;</div>
         <div class="skill-cat-title">Backend Development</div>
         <div class="skill-items">
-          <span class="skill-tag">Node.js</span>
-          <span class="skill-tag">Express</span>
           <span class="skill-tag">PHP</span>
           <span class="skill-tag">REST API</span>
           <span class="skill-tag">MySQL</span>
-          <span class="skill-tag">MongoDB</span>
+          <span class="skill-tag">SQL</span>
         </div>
       </div>
 
-      <div class="skill-category fade-in">
+      <div class="skill-category">
         <div class="skill-cat-icon">&#128736;&#65039;</div>
-        <div class="skill-cat-title">Tools & Others</div>
+        <div class="skill-cat-title">Tools &amp; Others</div>
         <div class="skill-items">
           <span class="skill-tag">Git</span>
           <span class="skill-tag">GitHub</span>
           <span class="skill-tag">VS Code</span>
-          <span class="skill-tag">Netlify</span>
           <span class="skill-tag">Figma</span>
           <span class="skill-tag">Linux</span>
         </div>
       </div>
 
-      <div class="skill-category fade-in">
+      <div class="skill-category">
         <div class="skill-cat-icon">&#128161;</div>
         <div class="skill-cat-title">Concepts</div>
         <div class="skill-items">
@@ -265,10 +342,10 @@
   </div>
 </section>
 
-<!-- ─── EDUCATION ─── -->
+<!-- EDUCATION -->
 <section id="education">
   <div class="section-wrapper">
-    <div class="section-header fade-in">
+    <div class="section-header">
       <span class="section-num">03</span>
       <h2 class="section-title">Education</h2>
       <div class="section-line"></div>
@@ -318,17 +395,17 @@
   </div>
 </section>
 
-<!-- ─── EXPERIENCE ─── -->
+<!-- EXPERIENCE -->
 <section id="experience">
   <div class="section-wrapper">
-    <div class="section-header fade-in">
+    <div class="section-header">
       <span class="section-num">04</span>
       <h2 class="section-title">Experience</h2>
       <div class="section-line"></div>
     </div>
 
     <div class="exp-grid">
-      <div class="exp-card current full fade-in">
+      <div class="exp-card current full">
         <div class="exp-top">
           <span class="exp-icon">&#127963;&#65039;</span>
           <span class="exp-status active live-dot">Present</span>
@@ -346,14 +423,14 @@
         </div>
       </div>
 
-      <div class="exp-card fade-in">
+      <div class="exp-card">
         <div class="exp-top">
           <span class="exp-icon">&#128188;</span>
           <span class="exp-status ojt">OJT</span>
         </div>
         <div class="exp-role">On-the-Job Training</div>
         <div class="exp-org">Gauradaha Municipality Office</div>
-        <div class="exp-period">6 Months · Grade 10 & 12 Internship</div>
+        <div class="exp-period">6 Months · Grade 10 &amp; 12 Internship</div>
         <div class="exp-desc">Hands-on training on municipal systems, workflows, and basic administrative operations.</div>
         <div class="exp-tags">
           <span class="exp-tag">Municipal Workflow</span>
@@ -362,7 +439,7 @@
         </div>
       </div>
 
-      <div class="exp-card workshop fade-in">
+      <div class="exp-card workshop">
         <div class="exp-top">
           <span class="exp-icon">&#9889;</span>
           <span class="exp-status ws">Workshop</span>
@@ -370,12 +447,10 @@
         <div class="exp-role">MERN Stack Development Workshop</div>
         <div class="exp-org">Model College Damak</div>
         <div class="exp-period">3-Day Intensive Training</div>
-        <div class="exp-desc">Intensive hands-on workshop on full-stack web development using modern JavaScript technologies.</div>
+        <div class="exp-desc">Intensive hands-on workshop on full-stack web development using modern technologies.</div>
         <div class="exp-tags">
-          <span class="exp-tag">MongoDB</span>
-          <span class="exp-tag">Express</span>
-          <span class="exp-tag">React</span>
-          <span class="exp-tag">Node.js</span>
+          <span class="exp-tag">PHP</span>
+          <span class="exp-tag">MySQL</span>
           <span class="exp-tag">REST API</span>
           <span class="exp-tag">Full Stack</span>
         </div>
@@ -384,102 +459,211 @@
   </div>
 </section>
 
-<!-- ─── PROJECTS ─── -->
+<!-- PROJECTS -->
 <section id="projects">
   <div class="section-wrapper">
-    <div class="section-header fade-in">
+    <div class="section-header">
       <span class="section-num">05</span>
       <h2 class="section-title">Projects</h2>
       <div class="section-line"></div>
     </div>
 
-    <div class="projects-toolbar fade-in">
-      <input type="text" id="projectSearch" class="filter-input" placeholder="Search projects..." onkeyup="if(event.key==='Enter')handleProjectSearch()">
-      <button class="filter-btn" onclick="handleProjectSearch()">Search</button>
-      <button class="filter-btn" onclick="document.getElementById('projectSearch').value='';loadProjects();">Clear</button>
+    <div class="projects-toolbar">
+      <form method="GET" action="index.php#projects" class="projects-search-form">
+        <input type="text" name="search" class="filter-input" placeholder="Search projects..." value="<?= e($projectSearch) ?>">
+        <button type="submit" class="filter-btn">Search</button>
+        <?php if ($projectSearch): ?>
+          <a href="index.php#projects" class="filter-btn">Clear</a>
+        <?php endif; ?>
+      </form>
     </div>
 
-    <div id="projectsGrid" class="projects-grid"></div>
-    <div id="projectsPagination" class="projects-pagination"></div>
+    <?php if (empty($projects)): ?>
+      <div class="empty-state">
+        <div class="empty-state-icon">&#128194;</div>
+        <p class="empty-state-text">No projects found.</p>
+      </div>
+    <?php else: ?>
+      <div class="projects-grid">
+        <?php foreach ($projects as $project): ?>
+          <a href="#project-<?= (int)$project['id'] ?>" class="project-card">
+            <div class="project-thumb">
+              <?php if (!empty($project['image_url'])): ?>
+                <img src="<?= e($project['image_url']) ?>" alt="<?= e($project['title']) ?>" loading="lazy">
+              <?php else: ?>
+                <?= getProjectEmoji($project['title']) ?>
+              <?php endif; ?>
+            </div>
+            <div class="project-body">
+              <div class="project-title"><?= e($project['title']) ?></div>
+              <div class="project-desc"><?= e(truncateStr($project['description'], 100)) ?></div>
+              <?php if (!empty($project['tech_stack'])): ?>
+                <div class="project-tech">
+                  <?php foreach (explode(',', $project['tech_stack']) as $tech): ?>
+                    <span><?= e(trim($tech)) ?></span>
+                  <?php endforeach; ?>
+                </div>
+              <?php endif; ?>
+              <div class="project-links">
+                <?php if (!empty($project['live_url'])): ?>
+                  <span class="project-link">Live &rarr;</span>
+                <?php endif; ?>
+                <?php if (!empty($project['github_url'])): ?>
+                  <span class="project-link">GitHub &rarr;</span>
+                <?php endif; ?>
+              </div>
+            </div>
+          </a>
+        <?php endforeach; ?>
+      </div>
+
+      <?php if ($totalProjectPages > 1): ?>
+        <div class="projects-pagination">
+          <?php for ($i = 1; $i <= $totalProjectPages; $i++): ?>
+            <a href="?page=<?= $i ?><?= $projectSearch ? '&search=' . urlencode($projectSearch) : '' ?>#projects" class="page-btn <?= $i === $projectPage ? 'active' : '' ?>"><?= $i ?></a>
+          <?php endfor; ?>
+        </div>
+      <?php endif; ?>
+    <?php endif; ?>
   </div>
 </section>
 
-<!-- Project Detail Modal -->
-<div id="projectModal" style="display:none;position:fixed;inset:0;background:rgba(0,0,0,0.75);backdrop-filter:blur(8px);justify-content:center;align-items:center;z-index:9999;">
-  <div style="background:var(--deep);padding:2rem;border-radius:20px;width:90%;max-width:500px;border:1px solid rgba(82,183,136,0.2);box-shadow:0 20px 60px rgba(0,0,0,0.5);position:relative;">
-    <button onclick="closeProjectModal()" style="position:absolute;top:12px;right:16px;cursor:pointer;font-size:1.5rem;color:var(--jade);background:none;border:none;">&#10005;</button>
-    <h2 id="projectModalTitle" style="font-family:'Playfair Display',serif;color:var(--snow);margin-bottom:1rem;font-size:1.5rem;"></h2>
-    <p id="projectModalDesc" style="color:var(--mist);line-height:1.7;margin-bottom:1.2rem;font-weight:300;"></p>
-    <div id="projectModalTech" class="project-tech" style="margin-bottom:1.5rem;"></div>
-    <div id="projectModalLinks" style="display:flex;gap:0.8rem;flex-wrap:wrap;"></div>
+<!-- Project Detail Modals (CSS :target) -->
+<?php foreach ($projects as $project): ?>
+  <?php if (!empty($project['id'])): ?>
+  <div id="project-<?= (int)$project['id'] ?>" class="project-modal-overlay">
+    <div class="project-modal-card">
+      <a href="#projects" class="project-modal-close">&#10005;</a>
+      <h2 class="project-modal-title"><?= e($project['title']) ?></h2>
+      <p class="project-modal-desc"><?= e($project['description']) ?></p>
+      <?php if (!empty($project['tech_stack'])): ?>
+        <div class="project-tech">
+          <?php foreach (explode(',', $project['tech_stack']) as $tech): ?>
+            <span><?= e(trim($tech)) ?></span>
+          <?php endforeach; ?>
+        </div>
+      <?php endif; ?>
+      <div class="project-modal-links">
+        <?php if (!empty($project['live_url'])): ?>
+          <a href="<?= e($project['live_url']) ?>" class="btn-primary" target="_blank" style="font-size:0.85rem;padding:0.6rem 1.5rem;">View Live</a>
+        <?php endif; ?>
+        <?php if (!empty($project['github_url'])): ?>
+          <a href="<?= e($project['github_url']) ?>" class="btn-outline" target="_blank" style="font-size:0.85rem;padding:0.6rem 1.5rem;">GitHub</a>
+        <?php endif; ?>
+      </div>
+    </div>
   </div>
-</div>
+  <?php endif; ?>
+<?php endforeach; ?>
 
-<!-- ─── MEMORIES ─── -->
+<!-- MEMORIES -->
 <section id="memories">
   <div class="section-wrapper">
-    <div class="section-header fade-in">
+    <div class="section-header">
       <span class="section-num">06</span>
       <h2 class="section-title">Memories</h2>
       <div class="section-line"></div>
     </div>
 
-    <div id="memoriesGrid" class="memories-grid"></div>
+    <?php if (empty($memories)): ?>
+      <div class="empty-state">
+        <div class="empty-state-icon">&#128248;</div>
+        <p class="empty-state-text">Gallery coming soon!</p>
+      </div>
+    <?php else: ?>
+      <div class="memories-grid">
+        <?php foreach ($memories as $memory): ?>
+          <a href="#memory-<?= (int)$memory['id'] ?>" class="memory-card">
+            <img src="<?= e($memory['image_url']) ?>" alt="<?= e($memory['title']) ?>" loading="lazy">
+            <div class="memory-overlay">
+              <h3><?= e($memory['title']) ?></h3>
+              <?php if (!empty($memory['description'])): ?>
+                <p><?= e($memory['description']) ?></p>
+              <?php endif; ?>
+            </div>
+          </a>
+        <?php endforeach; ?>
+      </div>
+    <?php endif; ?>
   </div>
 </section>
 
-<!-- Memory Modal -->
-<div id="memoryModal" class="memory-modal">
-  <div class="memory-modal-content">
-    <button class="modal-close" onclick="closeMemoryModal()">&#10005;</button>
-    <img id="memoryModalImg" src="" alt="Memory">
-    <div class="memory-modal-info">
-      <h3 id="memoryModalTitle"></h3>
-      <p id="memoryModalDesc"></p>
+<!-- Memory Modals (CSS :target) -->
+<?php foreach ($memories as $memory): ?>
+  <div id="memory-<?= (int)$memory['id'] ?>" class="memory-modal">
+    <div class="memory-modal-content">
+      <a href="#memories" class="modal-close">&#10005;</a>
+      <img src="<?= e($memory['image_url']) ?>" alt="<?= e($memory['title']) ?>">
+      <div class="memory-modal-info">
+        <h3><?= e($memory['title']) ?></h3>
+        <?php if (!empty($memory['description'])): ?>
+          <p><?= e($memory['description']) ?></p>
+        <?php endif; ?>
+      </div>
     </div>
   </div>
-</div>
+<?php endforeach; ?>
 
-<!-- ─── BLOG ─── -->
+<!-- BLOG -->
 <section id="blog">
   <div class="section-wrapper">
-    <div class="section-header fade-in">
+    <div class="section-header">
       <span class="section-num">07</span>
       <h2 class="section-title">Blog</h2>
       <div class="section-line"></div>
     </div>
 
-    <div class="blog-toolbar fade-in">
-      <input type="text" id="blogSearch" class="filter-input" placeholder="Search blog posts..." onkeyup="if(event.key==='Enter')handleBlogSearch()">
-      <button class="filter-btn" onclick="handleBlogSearch()">Search</button>
+    <div class="blog-toolbar">
+      <form method="GET" action="index.php#blog" class="blog-search-form">
+        <?php if ($projectSearch): ?>
+          <input type="hidden" name="search" value="<?= e($projectSearch) ?>">
+        <?php endif; ?>
+        <input type="text" name="blog_search" class="filter-input" placeholder="Search blog posts..." value="<?= e($blogSearch) ?>">
+        <button type="submit" class="filter-btn">Search</button>
+      </form>
     </div>
 
-    <div id="blogGrid" class="blog-grid"></div>
+    <?php if (empty($blogs)): ?>
+      <div class="empty-state">
+        <div class="empty-state-icon">&#128221;</div>
+        <p class="empty-state-text">No blog posts yet. Stay tuned!</p>
+      </div>
+    <?php else: ?>
+      <div class="blog-grid">
+        <?php foreach ($blogs as $blog): ?>
+          <a href="blog.php?id=<?= (int)$blog['id'] ?>" class="blog-card">
+            <div class="blog-cover">
+              <?php if (!empty($blog['cover_image'])): ?>
+                <img src="<?= e($blog['cover_image']) ?>" alt="<?= e($blog['title']) ?>" loading="lazy">
+              <?php else: ?>
+                <span class="blog-cover-placeholder">&#128221;</span>
+              <?php endif; ?>
+            </div>
+            <div class="blog-body">
+              <div class="blog-date"><?= formatDate($blog['created_at']) ?></div>
+              <div class="blog-title"><?= e($blog['title']) ?></div>
+              <div class="blog-excerpt"><?= e($blog['excerpt'] ?? '') ?>...</div>
+              <span class="blog-read-more">Read More &rarr;</span>
+            </div>
+          </a>
+        <?php endforeach; ?>
+      </div>
+    <?php endif; ?>
   </div>
 </section>
 
-<!-- Blog Detail Modal -->
-<div id="blogModal" class="blog-modal">
-  <button class="blog-modal-close" onclick="closeBlogModal()">&#10005;</button>
-  <div class="blog-modal-content">
-    <div id="blogModalDate" class="blog-modal-date"></div>
-    <h1 id="blogModalTitle" class="blog-modal-title"></h1>
-    <div id="blogModalBody" class="blog-modal-body"></div>
-  </div>
-</div>
-
-<!-- ─── CONTACT ─── -->
+<!-- CONTACT -->
 <section id="contact">
   <div class="section-wrapper">
     <div class="contact-inner">
-      <div class="section-header fade-in" style="justify-content: center; margin-bottom: 1rem;">
+      <div class="section-header" style="justify-content: center; margin-bottom: 1rem;">
         <span class="section-num">08</span>
         <h2 class="section-title">Let's Connect</h2>
       </div>
 
-      <p class="contact-subtitle fade-in">Got a project in mind or just want to say hello? Feel free to reach out.</p>
+      <p class="contact-subtitle">Got a project in mind or just want to say hello? Feel free to reach out.</p>
 
-      <div class="contact-cards fade-in">
+      <div class="contact-cards">
         <div class="contact-row">
           <span class="contact-icon">&#9993;&#65039;</span>
           <div class="contact-info">
@@ -508,17 +692,13 @@
   </div>
 </section>
 
-<!-- ─── FOOTER ─── -->
+<!-- FOOTER -->
 <footer>
   <span>With &#9829; Anup Dahal</span>
   <div class="footer-links">
-    <a href="admin.html">Admin</a>
+    <a href="admin.php">Admin</a>
   </div>
 </footer>
-
-<!-- Scripts -->
-<script src="js/api.js"></script>
-<script src="js/app.js"></script>
 
 </body>
 </html>

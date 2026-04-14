@@ -1,5 +1,5 @@
 /* ═══════════════════════════════════════════════
-   ADMIN PANEL — Stylesheet
+   ADMIN PANEL — Stylesheet (Pure CSS, No JS)
    ═══════════════════════════════════════════════ */
 
 *, *::before, *::after { margin: 0; padding: 0; box-sizing: border-box; }
@@ -120,6 +120,15 @@ a:hover { text-decoration: underline; }
   min-height: 100vh;
 }
 
+/* CSS-only sidebar toggle for mobile */
+.sidebar-toggle-input {
+  display: none;
+}
+
+.sidebar-toggle-input:checked ~ .admin-sidebar {
+  left: 0;
+}
+
 /* Sidebar */
 .admin-sidebar {
   background: var(--deep);
@@ -170,8 +179,9 @@ a:hover { text-decoration: underline; }
   cursor: pointer; width: 100%;
   font-family: 'Outfit', sans-serif;
   transition: var(--transition);
+  text-decoration: none; justify-content: center;
 }
-.logout-btn:hover { background: rgba(231,76,60,0.15); }
+.logout-btn:hover { background: rgba(231,76,60,0.15); text-decoration: none; }
 
 /* Main content */
 .admin-main {
@@ -188,11 +198,6 @@ a:hover { text-decoration: underline; }
   font-family: 'Playfair Display', serif;
   font-size: 1.8rem; font-weight: 900;
   color: var(--snow);
-}
-
-.admin-user {
-  font-size: 0.85rem; color: var(--pine);
-  font-family: 'Space Mono', monospace;
 }
 
 /* Dashboard stats */
@@ -222,12 +227,6 @@ a:hover { text-decoration: underline; }
   text-transform: uppercase; letter-spacing: 0.1em;
   font-family: 'Space Mono', monospace;
 }
-
-/* Section panels */
-.admin-panel {
-  display: none;
-}
-.admin-panel.active { display: block; }
 
 /* Table */
 .admin-table-wrap {
@@ -267,6 +266,7 @@ a:hover { text-decoration: underline; }
   font-family: 'Outfit', sans-serif;
   transition: var(--transition);
   margin-right: 0.3rem;
+  text-decoration: none; display: inline-block;
 }
 
 .action-btn.edit {
@@ -274,7 +274,7 @@ a:hover { text-decoration: underline; }
   border: 1px solid rgba(82,183,136,0.2);
   color: var(--jade);
 }
-.action-btn.edit:hover { background: rgba(82,183,136,0.2); }
+.action-btn.edit:hover { background: rgba(82,183,136,0.2); text-decoration: none; }
 
 .action-btn.delete {
   background: rgba(231,76,60,0.1);
@@ -289,8 +289,9 @@ a:hover { text-decoration: underline; }
   border: none; border-radius: 100px;
   font-family: 'Outfit', sans-serif; font-weight: 600; font-size: 0.85rem;
   cursor: pointer; transition: transform 0.2s;
+  text-decoration: none; display: inline-block;
 }
-.add-btn:hover { transform: translateY(-2px); box-shadow: 0 6px 20px rgba(82,183,136,0.3); }
+.add-btn:hover { transform: translateY(-2px); box-shadow: 0 6px 20px rgba(82,183,136,0.3); text-decoration: none; }
 
 .panel-header {
   display: flex; justify-content: space-between; align-items: center;
@@ -303,33 +304,18 @@ a:hover { text-decoration: underline; }
   color: var(--snow);
 }
 
-/* Modal form */
-.admin-modal {
-  display: none; position: fixed; inset: 0; z-index: 9999;
-  background: rgba(0,0,0,0.75); backdrop-filter: blur(8px);
-  align-items: center; justify-content: center;
-}
-.admin-modal.open { display: flex; }
-
-.admin-modal-card {
+/* Inline form card (replaces JS modals) */
+.admin-form-card {
   background: var(--deep);
   border: 1px solid var(--card-border);
   border-radius: 20px;
-  padding: 2rem; width: 90%; max-width: 500px;
-  max-height: 90vh; overflow-y: auto;
-  position: relative;
+  padding: 2rem; margin-bottom: 2rem;
 }
 
-.admin-modal-title {
+.admin-form-title {
   font-family: 'Playfair Display', serif;
   font-size: 1.3rem; font-weight: 700;
   color: var(--snow); margin-bottom: 1.5rem;
-}
-
-.admin-modal-close {
-  position: absolute; top: 12px; right: 16px;
-  background: none; border: none; color: var(--jade);
-  font-size: 1.5rem; cursor: pointer;
 }
 
 .form-actions {
@@ -351,10 +337,11 @@ a:hover { text-decoration: underline; }
   border: 1px solid var(--card-border); border-radius: 10px;
   font-family: 'Outfit', sans-serif; font-size: 0.9rem;
   cursor: pointer; transition: var(--transition);
+  text-decoration: none; display: inline-flex; align-items: center; justify-content: center;
 }
-.cancel-btn:hover { border-color: var(--mist); }
+.cancel-btn:hover { border-color: var(--mist); text-decoration: none; }
 
-/* Toast (reuse) */
+/* Toast (flash messages) */
 .toast-container {
   position: fixed; top: 20px; right: 20px; z-index: 10001;
   display: flex; flex-direction: column; gap: 0.5rem;
@@ -369,10 +356,14 @@ a:hover { text-decoration: underline; }
 .toast.success { background: rgba(82,183,136,0.9); }
 .toast.error { background: rgba(231,76,60,0.9); }
 .toast.info { background: rgba(52,152,219,0.9); }
-.toast.hiding { animation: toastOut 0.3s ease forwards; }
+
+/* Auto-hide toast via CSS animation */
+.toast.auto-hide {
+  animation: toastIn 0.3s ease, toastOut 0.3s ease 3s forwards;
+}
 
 @keyframes toastIn { from { opacity: 0; transform: translateX(100px); } to { opacity: 1; transform: translateX(0); } }
-@keyframes toastOut { from { opacity: 1; } to { opacity: 0; transform: translateX(100px); } }
+@keyframes toastOut { from { opacity: 1; } to { opacity: 0; transform: translateX(100px); pointer-events: none; } }
 
 /* Empty state */
 .admin-empty {
@@ -387,7 +378,7 @@ a:hover { text-decoration: underline; }
     position: fixed; top: 0; left: -100%; width: 240px;
     height: 100vh; z-index: 200; transition: left 0.3s;
   }
-  .admin-sidebar.open { left: 0; }
+  .sidebar-toggle-input:checked ~ .admin-sidebar { left: 0; }
   .mobile-toggle {
     display: block; position: fixed; top: 1rem; left: 1rem;
     z-index: 201; background: var(--jade); color: var(--night);

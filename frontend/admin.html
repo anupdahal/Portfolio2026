@@ -1,0 +1,262 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Admin Panel — Anup Dahal Portfolio</title>
+  <meta name="robots" content="noindex, nofollow">
+  <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@400;700;900&family=Outfit:wght@300;400;500;600&family=Space+Mono:wght@400;700&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="css/admin.css">
+</head>
+<body>
+
+<!-- Toast Container -->
+<div id="toastContainer" class="toast-container"></div>
+
+<!-- ─── LOGIN VIEW ─── -->
+<div id="loginView" class="login-wrapper">
+  <div class="login-card">
+    <div class="login-logo">AD</div>
+    <div class="login-subtitle">Admin Panel</div>
+
+    <form onsubmit="handleLogin(event)">
+      <div class="form-group">
+        <label class="form-label" for="loginUsername">Username</label>
+        <input type="text" id="loginUsername" class="form-input" placeholder="Enter username" autocomplete="username">
+      </div>
+      <div class="form-group">
+        <label class="form-label" for="loginPassword">Password</label>
+        <input type="password" id="loginPassword" class="form-input" placeholder="Enter password" autocomplete="current-password">
+      </div>
+      <button type="submit" class="login-btn">Sign In</button>
+      <div id="loginError" class="login-error"></div>
+    </form>
+
+    <a href="index.html" class="login-back">&larr; Back to Portfolio</a>
+  </div>
+</div>
+
+<!-- ─── DASHBOARD VIEW ─── -->
+<div id="dashboardView" class="admin-layout" style="display:none;">
+
+  <!-- Mobile Toggle -->
+  <button class="mobile-toggle" onclick="toggleMobileSidebar()">&#9776;</button>
+
+  <!-- Sidebar -->
+  <aside class="admin-sidebar">
+    <div class="sidebar-logo">AD</div>
+    <div class="sidebar-subtitle">Admin Panel</div>
+
+    <ul class="sidebar-nav">
+      <li><a href="#" data-panel="dashboard" class="active"><span class="nav-icon">&#128200;</span> Dashboard</a></li>
+      <li><a href="#" data-panel="projects"><span class="nav-icon">&#128187;</span> Projects</a></li>
+      <li><a href="#" data-panel="memories"><span class="nav-icon">&#128248;</span> Memories</a></li>
+      <li><a href="#" data-panel="blogs"><span class="nav-icon">&#128221;</span> Blogs</a></li>
+    </ul>
+
+    <div class="sidebar-footer">
+      <a href="index.html" style="display:block;text-align:center;font-size:0.85rem;color:var(--pine);margin-bottom:0.8rem;text-decoration:none;">&larr; View Portfolio</a>
+      <button class="logout-btn" onclick="handleLogout()">
+        <span>&#9211;</span> Logout
+      </button>
+    </div>
+  </aside>
+
+  <!-- Main Content -->
+  <main class="admin-main">
+
+    <!-- ─── Dashboard Panel ─── -->
+    <div id="panel-dashboard" class="admin-panel active">
+      <div class="admin-header">
+        <h1 class="admin-title">Dashboard</h1>
+      </div>
+
+      <div class="dash-stats">
+        <div class="dash-stat">
+          <div class="dash-stat-icon">&#128187;</div>
+          <div id="statProjects" class="dash-stat-num">-</div>
+          <div class="dash-stat-label">Projects</div>
+        </div>
+        <div class="dash-stat">
+          <div class="dash-stat-icon">&#128248;</div>
+          <div id="statMemories" class="dash-stat-num">-</div>
+          <div class="dash-stat-label">Memories</div>
+        </div>
+        <div class="dash-stat">
+          <div class="dash-stat-icon">&#128221;</div>
+          <div id="statBlogs" class="dash-stat-num">-</div>
+          <div class="dash-stat-label">Blog Posts</div>
+        </div>
+      </div>
+
+      <p style="color:var(--pine);font-size:0.9rem;">
+        Use the sidebar to manage your portfolio content. Changes are reflected on the live site immediately.
+      </p>
+    </div>
+
+    <!-- ─── Projects Panel ─── -->
+    <div id="panel-projects" class="admin-panel">
+      <div class="panel-header">
+        <h2 class="panel-title">Projects</h2>
+        <button class="add-btn" onclick="openProjectForm()">+ Add Project</button>
+      </div>
+
+      <div class="admin-table-wrap">
+        <table class="admin-table">
+          <thead>
+            <tr>
+              <th>Title</th>
+              <th>Description</th>
+              <th>Tech Stack</th>
+              <th>Created</th>
+              <th>Actions</th>
+            </tr>
+          </thead>
+          <tbody id="projectsTableBody"></tbody>
+        </table>
+      </div>
+    </div>
+
+    <!-- ─── Memories Panel ─── -->
+    <div id="panel-memories" class="admin-panel">
+      <div class="panel-header">
+        <h2 class="panel-title">Memories</h2>
+        <button class="add-btn" onclick="openMemoryForm()">+ Add Memory</button>
+      </div>
+
+      <div class="admin-table-wrap">
+        <table class="admin-table">
+          <thead>
+            <tr>
+              <th>Title</th>
+              <th>Description</th>
+              <th>Created</th>
+              <th>Actions</th>
+            </tr>
+          </thead>
+          <tbody id="memoriesTableBody"></tbody>
+        </table>
+      </div>
+    </div>
+
+    <!-- ─── Blogs Panel ─── -->
+    <div id="panel-blogs" class="admin-panel">
+      <div class="panel-header">
+        <h2 class="panel-title">Blog Posts</h2>
+        <button class="add-btn" onclick="openBlogForm()">+ New Post</button>
+      </div>
+
+      <div class="admin-table-wrap">
+        <table class="admin-table">
+          <thead>
+            <tr>
+              <th>Title</th>
+              <th>Excerpt</th>
+              <th>Created</th>
+              <th>Actions</th>
+            </tr>
+          </thead>
+          <tbody id="blogsTableBody"></tbody>
+        </table>
+      </div>
+    </div>
+
+  </main>
+</div>
+
+<!-- ─── PROJECT FORM MODAL ─── -->
+<div id="projectFormModal" class="admin-modal">
+  <div class="admin-modal-card">
+    <button class="admin-modal-close" onclick="closeProjectForm()">&#10005;</button>
+    <h3 id="projectFormTitle" class="admin-modal-title">Add Project</h3>
+
+    <div class="form-group">
+      <label class="form-label" for="projTitle">Title *</label>
+      <input type="text" id="projTitle" class="form-input" placeholder="Project title">
+    </div>
+    <div class="form-group">
+      <label class="form-label" for="projDesc">Description *</label>
+      <textarea id="projDesc" class="form-textarea" placeholder="Project description"></textarea>
+    </div>
+    <div class="form-group">
+      <label class="form-label" for="projImage">Image URL</label>
+      <input type="text" id="projImage" class="form-input" placeholder="https://example.com/image.jpg">
+    </div>
+    <div class="form-group">
+      <label class="form-label" for="projTech">Tech Stack</label>
+      <input type="text" id="projTech" class="form-input" placeholder="HTML,CSS,JavaScript (comma separated)">
+    </div>
+    <div class="form-group">
+      <label class="form-label" for="projLive">Live URL</label>
+      <input type="text" id="projLive" class="form-input" placeholder="https://yourproject.com">
+    </div>
+    <div class="form-group">
+      <label class="form-label" for="projGithub">GitHub URL</label>
+      <input type="text" id="projGithub" class="form-input" placeholder="https://github.com/user/repo">
+    </div>
+
+    <div class="form-actions">
+      <button class="save-btn" onclick="saveProject()">Save Project</button>
+      <button class="cancel-btn" onclick="closeProjectForm()">Cancel</button>
+    </div>
+  </div>
+</div>
+
+<!-- ─── MEMORY FORM MODAL ─── -->
+<div id="memoryFormModal" class="admin-modal">
+  <div class="admin-modal-card">
+    <button class="admin-modal-close" onclick="closeMemoryForm()">&#10005;</button>
+    <h3 class="admin-modal-title">Add Memory</h3>
+
+    <div class="form-group">
+      <label class="form-label" for="memTitle">Title *</label>
+      <input type="text" id="memTitle" class="form-input" placeholder="Memory title">
+    </div>
+    <div class="form-group">
+      <label class="form-label" for="memDesc">Description</label>
+      <textarea id="memDesc" class="form-textarea" placeholder="Short description (optional)" style="min-height:80px;"></textarea>
+    </div>
+    <div class="form-group">
+      <label class="form-label" for="memImage">Image URL *</label>
+      <input type="text" id="memImage" class="form-input" placeholder="https://example.com/photo.jpg">
+    </div>
+
+    <div class="form-actions">
+      <button class="save-btn" onclick="saveMemory()">Save Memory</button>
+      <button class="cancel-btn" onclick="closeMemoryForm()">Cancel</button>
+    </div>
+  </div>
+</div>
+
+<!-- ─── BLOG FORM MODAL ─── -->
+<div id="blogFormModal" class="admin-modal">
+  <div class="admin-modal-card">
+    <button class="admin-modal-close" onclick="closeBlogForm()">&#10005;</button>
+    <h3 id="blogFormTitle" class="admin-modal-title">New Blog Post</h3>
+
+    <div class="form-group">
+      <label class="form-label" for="blogTitle">Title *</label>
+      <input type="text" id="blogTitle" class="form-input" placeholder="Blog post title">
+    </div>
+    <div class="form-group">
+      <label class="form-label" for="blogContent">Content *</label>
+      <textarea id="blogContent" class="form-textarea" placeholder="Write your blog post..." style="min-height:200px;"></textarea>
+    </div>
+    <div class="form-group">
+      <label class="form-label" for="blogCover">Cover Image URL</label>
+      <input type="text" id="blogCover" class="form-input" placeholder="https://example.com/cover.jpg">
+    </div>
+
+    <div class="form-actions">
+      <button class="save-btn" onclick="saveBlog()">Publish</button>
+      <button class="cancel-btn" onclick="closeBlogForm()">Cancel</button>
+    </div>
+  </div>
+</div>
+
+<!-- Scripts -->
+<script src="js/api.js"></script>
+<script src="js/admin.js"></script>
+
+</body>
+</html>

@@ -1,0 +1,14 @@
+# Note: This project now uses PHP for server-side rendering.
+# Deploy the backend-php/ directory on a PHP-capable server (Apache/Nginx).
+# Deploy the frontend/ directory on the same PHP server.
+# Netlify can only serve the static assets (CSS, images).
+
+[build]
+  publish = "frontend"
+
+[[headers]]
+  for = "/*"
+  [headers.values]
+    X-Frame-Options = "DENY"
+    X-Content-Type-Options = "nosniff"
+    Referrer-Policy = "strict-origin-when-cross-origin"
